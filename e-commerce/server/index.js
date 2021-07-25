@@ -1,51 +1,19 @@
-const { ApolloServer, gql } = require ('apollo-server');
-const {mainCards, animals} = require("./db");
+const { ApolloServer} = require ('apollo-server');
+const {mainCards, animals, categories } = require("./db");
+const typeDefs = require("./schema")
+const Query = require("./resolvers/Query")
+const Category = require("./resolvers/Category")
+const Animal = require("./resolvers/Animals")
 
-const typeDefs = gql`
-
-    type MainCard{
-        title:String!
-        image: String!
-        
+const server = new ApolloServer({ 
+    typeDefs,
+    resolvers: {
+        Query,
+        Animal,
+        Category
     }
 
-    type Animal{
-        id: ID!
-        image: String!
-        title: String!
-        rating: Float
-        price: String!
-        description: [String!]!
-        slug: String!
-        stock: Int!
-        onSale: Boolean
-
-        
-    }
-
-    type Query{
-        mainCards:[MainCard]
-        animals: [Animal!]!
-        animal(slug: String!): Animal!
-    }
-`;
-
-
-
-const resolvers = {
-    Query: {
-        mainCards: () => mainCards,
-        animals: () => animals,
-        animal: (parent, args, ctx) => {
-            let animal = animals.find((animal) =>{
-                return animal.slug === args.slug
-            })
-            return animal
-        }
-    },
-};
-
-const server = new ApolloServer({  typeDefs,resolvers });
+});
 
 server.listen().then(({url}) => {
     console.log(`Server ready at ${url}`);
