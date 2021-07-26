@@ -1,7 +1,7 @@
 const {mainCards, animals, categories } = require("../db");
 
 const Query= {
-    mainCards: () => mainCards,
+    mainCards: (parents, args, {mainCards}) => mainCards,
 
     animals: (parents, args, {animals}) => animals,
 
