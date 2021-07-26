@@ -4,12 +4,26 @@ import animals from "../../assets/images"
 import star from "../../assets/svg/star.svg"
 import "./AnimalPage.css"
 import { useParams } from "react-router-dom"
+import { useQuery, gql } from "@apollo/client"
+
+const ANIMAL_QUARY = gql`
+query($slug: String!){
+    animal(slug: $slug){
+        title
+        image
+        stock
+        description
+        price
+    }
+}
+`
 
 function AnimalPage() {
 
     const { slug } = useParams();
-    
 
+    const { data, loading, error } = useQuery()
+    
     return (
         <div className="py-5">
             <Container>
